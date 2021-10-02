@@ -1,21 +1,29 @@
 <script>
-	export let name;
+  import Footer from './components/footer/footer.svelte';
+  import FormulaireInitiale from './components/formulaire-initial/formulaire-initial.svelte';
+  import NavBar from './components/nav-bar/nav-bar.svelte';
+
+  let isInitialFormShowed = true;
+
+  const initPoolForm = (event) => {
+    const initialPoolObj = event.detail
+    isInitialFormShowed = false;
+  }
 </script>
 
-<main>
-  <div class="text-center p-4 max-w-xs mx-auto sm:max-w-none">
-    <h1 class="text-red-500 text-6xl uppercase leading-loose font-thin">
-      Hello {name}!
-    </h1>
-    <p class="text-gray-700">
-      Visit the
-      <a class="text-blue-600 hover:underline" href="https://svelte.dev/tutorial">
-        Svelte tutorial
-      </a>
-      to learn how to build Svelte apps.
-    </p>
-  </div>
-</main>
+<div class="flex flex-col h-screen justify-between">
+  <header class="h-18 bg-black shadow-lg text-center">
+    <NavBar />
+  </header>
+  <main class="mt-8 mb-auto">
+    {#if isInitialFormShowed}
+      <FormulaireInitiale on:createPool={initPoolForm} />
+    {/if}
+  </main>
+  <footer class="h-8">
+    <Footer />
+  </footer>
+</div>
 
 <style lang="postcss" global>
   @tailwind base;
