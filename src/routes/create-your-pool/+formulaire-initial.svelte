@@ -1,11 +1,11 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import InitPoolForm from '../../models/initial-pool-form.js';
-  import Category from './../../models/category.js';
+  import Category from '../../models/category.js';
 
   const dispatch = createEventDispatcher();
 
-  let capHit;
+  let capHit = 0;
   let participant;
   let participants = [];
   let categoryName;
@@ -61,17 +61,15 @@
     }
   }
 
-  const submit = () => {
-    const isCapHitValid = capHit && typeof capHit == 'number' && capHit > 0;
+  const isFormValid = () => {
+    const isCapHitValid = typeof capHit == 'number' && capHit >= 0;
 
     noParticipantError = false;
     noCategoryError = false;
     capHitRequiredError = false;
 
     if (isCapHitValid && participants?.length > 0 && categories?.length > 0) {
-      const formulaire = new InitPoolForm(capHit.toFixed(3), participants, categories)
-      dispatch('createPool', formulaire);
-
+      return true;
     } else {
       if (!isCapHitValid) {
         capHitRequiredError = true;
@@ -84,8 +82,20 @@
       if (categories?.length < 1) {
         noCategoryError = true;
       }
+
+      return false;
     }
   }
+
+  const submit = () => {
+    if (isFormValid()) {
+      console.log('hello');
+
+      const formulaire = new InitPoolForm(capHit.toFixed(3), participants, categories)
+      dispatch('createPool', formulaire);
+    }
+  }
+  
 </script>
 
 <div class=" container flex items-center justify-center">
@@ -107,14 +117,14 @@
                 Cap salarial
               </label>
               {#if capHitRequiredError}
-                <p id="cap-hit-error" class="text-red-500">Ce champs est requis et doit comporter un nombre supérieur à 0.</p>
+                <p id="cap-hit-error" class="text-red-500">Une valeur de 0 ou plus est requise pour indiquer la masse salariale maximum.</p>
               {/if}
               <div class="flex flex-row">
                 <input id="cap-hit" type="number" step="0.001" aria-describedby="cap-hit-error" autocomplete="off" bind:value={capHit} class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                 <span class="pt-2 pl-2">M$</span>
               </div>
             </div>
-            <p class="text-sm">1 M$ = 1 000 000$ - Example : 81.5 M$ = 81 500 000$</p>
+            <p class="text-sm">0M$ = 0& | 1 M$ = 1 000 000$ - Example : 81.5 M$ = 81 500 000$</p>
           </div>
           <!-- Champs d'entré des participants -->
           <div>

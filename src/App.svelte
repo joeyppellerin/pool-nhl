@@ -1,6 +1,6 @@
 <script>
   import Footer from './components/footer/footer.svelte';
-  import FormulaireInitiale from './components/formulaire-initial/formulaire-initial.svelte';
+  import FormulaireInitiale from './routes/create-your-pool/+formulaire-initial.svelte';
   import NavBar from './components/nav-bar/nav-bar.svelte';
 
   let isInitialFormShowed = true;
