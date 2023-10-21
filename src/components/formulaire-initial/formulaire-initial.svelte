@@ -88,22 +88,22 @@
   }
 </script>
 
-<div class="container flex items-center justify-center">
+<div class=" container flex items-center justify-center">
   <form on:submit|preventDefault={submit}>
     <div class="p-10">
       <!--Form Card-->
-      <div class="max-w-md rounded overflow-hidden shadow-lg">
+      <div class="max-w-lg rounded-lg overflow-hidden shadow-lg">
         <div class="px-6 py-4 bg-yellow-500">
           <div class="mb-2">
             <h2 class="font-bold text-xl">Création de l'affichage du pool</h2>
-            <p class="text-sm mt-2">Chaque participant possède une carte, dans laquelle s'affichera les joueurs choisis triés selon les catégories. (ex. Attaquants, Défensseur, Gardiens de but, etc.)</p>
+            <p class="text-md mt-2">Pour créer un nouveau pool, vous devez définir le cap salariale Maximal, le nom des participants du pool ainsi que le format du pool (par example, le nombre d'attaquants à sélectionner).</p>
           </div>
         </div>
         <div class="px-6 pt-4 pb-2">
           <!-- Champs d'entré du cap salarial -->
           <div class="mb-6">
             <div class="mb-2">
-              <label class="block text-gray-700 text-sm font-bold mb-2" for="cap-hit">
+              <label class="block text-gray-700 text-md font-bold mb-2" for="cap-hit">
                 Cap salarial
               </label>
               {#if capHitRequiredError}
@@ -114,11 +114,11 @@
                 <span class="pt-2 pl-2">M$</span>
               </div>
             </div>
-            <p class="text-xs">1 M$ = 1 000 000$ - Example : 81.5 M$ = 81 500 000$</p>
+            <p class="text-sm">1 M$ = 1 000 000$ - Example : 81.5 M$ = 81 500 000$</p>
           </div>
           <!-- Champs d'entré des participants -->
           <div>
-            <label class="block text-gray-700 text-sm font-bold mb-2" for="participant-name">
+            <label class="block text-gray-700 text-md font-bold mb-2" for="participant-name">
               Nom du participant
             </label>
             {#if noParticipantError}
@@ -136,45 +136,54 @@
           </div>
           <!-- Liste de participants -->
           {#if participants?.length > 0}
-            <div class="pt-2 pb-4">
-              <ul>
-                {#each participants as participant, i}
-                  <div class="pt-2">
-                    <div>
-                      <li class="inline mr-1">
-                        <span class="rounded-full bg-yellow-500 px-3 py-1">
-                          {participant}
-                        </span>
-                      </li>
-                      <button on:click|preventDefault={() => deleteParticipant(i)} type="button" class="inline w-7 h-7 bg-red-600 text-white rounded-full hover:bg-red-900 focus:outline-none focus:shadow-outlinep-2 shadow font-bold">
-                        X
-                      </button>
+          <div>
+            <div class="flex flex-wrap">
+              {#each participants as participant, i}
+              <div>
+                <div class="pt-3">
+                  <div class="pr-1">
+                    <div class="flex flex-nowrap">
+                      <div>
+                        <div class="rounded-full bg-yellow-500 px-3 py-1">
+                          <span class="font-bold">{participant}</span>
+                          <button on:click|preventDefault={() => deleteParticipant(i)} type="button" class="ml-2 inline w-7 h-7 bg-red-600 text-white rounded-full hover:bg-red-900 focus:outline-none focus:shadow-outlinep-2 shadow font-bold">
+                            X
+                          </button>
+                        </div>
+                      </div>
+                      </div>
                     </div>
-                  </div>
-                {/each}
-              </ul>
+                </div>
+              </div>
+              {/each}
             </div>
+          </div>
           {/if}
           <!-- Champs d'entré des catégories -->
           <fieldset class="mt-4" aria-labelledby="category-fields" aria-describedby="no-category-error">
             <legend>
-              <p id="category-fields" class="font-bold text-lg">Catégorie</p>
+              <p id="category-fields" class="font-bold text-lg">
+                <span>Catégorie</span>{#if categories?.length > 1}<span>s</span>{/if}
+              </p>
             </legend>
             {#if noCategoryError}
               <p id="no-category-error" class="text-red-500">Un minimum d'une catégorie est requise.</p>
             {/if}
-            <div class="mt-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2" for="category-name">
-                Nom de la catégorie
-              </label>
-              {#if fieldCategoryNameError}
-                <p id="required-field-name-error" class="text-red-500">Ce champs est requis.</p>
-              {/if}
-              <input aria-describedby="required-field-name-error" autocomplete="off" bind:value={categoryName} class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="category-name" type="text">
+            <div>
+              <div class="mt-4 mb-2">
+                <label class="block text-gray-700 text-md font-bold mb-2" for="category-name">
+                  Nom de la catégorie
+                </label>
+                {#if fieldCategoryNameError}
+                  <p id="required-field-name-error" class="text-red-500">Ce champs est requis.</p>
+                {/if}
+                <input aria-describedby="required-field-name-error" autocomplete="off" bind:value={categoryName} class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="category-name" type="text">
+              </div>
+              <p class="text-sm">Example : Attanquant, Défenseurs, Gardien de but, Équipe, etc.</p>
             </div>
             <div class="mt-4">
-              <label class="block text-gray-700 text-sm font-bold mb-2" for="category-number">
-                Nombre de joueurs par catégorie
+              <label class="block text-gray-700 text-md font-bold mb-2" for="category-number">
+                Nombre de choix par catégorie
               </label>
               {#if fieldCategoryNumberError}
                 <p id="required-field-limit-error" class="text-red-500">Ce champs est requis.</p>
@@ -190,20 +199,26 @@
           <!-- Liste de catégories -->
           {#if categories?.length > 0}
           <div>
-            <ul>
+            <div class="flex flex-wrap">
               {#each categories as category, i}
+              <div>
                 <div class="pt-3">
-                  <li class="inline pr-1">
-                    <span class="rounded-full bg-yellow-500 px-3 py-1">
-                      <span class="font-bold">{category.name}</span> | Limite de joueurs: <span class="font-bold">{category.playersLimit}</span>
-                    </span>
-                  </li>
-                  <button on:click|preventDefault={() => deleteCategory(i)} type="button" class="inline w-7 h-7 bg-red-600 text-white rounded-full hover:bg-red-900 focus:outline-none focus:shadow-outlinep-2 shadow font-bold">
-                    X
-                  </button>
+                  <div class="pr-1">
+                    <div class="flex flex-nowrap">
+                      <div>
+                        <div class="rounded-full bg-yellow-500 px-3 py-1">
+                          <span class="font-bold">{category.name}</span>&nbsp;|&nbsp;Nombre de choix&nbsp;:&nbsp;<span class="font-bold">{category.playersLimit}</span>
+                          <button on:click|preventDefault={() => deleteCategory(i)} type="button" class="ml-2 inline w-7 h-7 bg-red-600 text-white rounded-full hover:bg-red-900 focus:outline-none focus:shadow-outlinep-2 shadow font-bold">
+                            X
+                          </button>
+                        </div>
+                      </div>
+                      </div>
+                    </div>
                 </div>
+              </div>
               {/each}
-            </ul>
+            </div>
           </div>
         {/if}
           <!-- Bouton pour soumettre le formulaire -->
